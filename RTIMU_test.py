@@ -8,7 +8,7 @@ Created on Thu Jun 28 11:38:16 2018
 import RTIMU
 import time
 
-timeout = 10
+timeout = 30
  
 start_time = time.time()
 
@@ -18,12 +18,19 @@ print("IMU Name: " + imu.IMUName())
 
 data = (0, 0, 0)
 
+imu.IMUInit()
+
 wait_s = imu.IMUGetPollInterval()/1000.0
+
+print(wait_s)
 
 current_time = time.time() - start_time
 
 while current_time < timeout:
     if imu.IMURead():
-        data = imu.getFusionData()
+        data = imu.getAccel()
+        print(data)
     time.sleep(wait_s)
     current_time = time.time() - start_time
+
+print(data)  
