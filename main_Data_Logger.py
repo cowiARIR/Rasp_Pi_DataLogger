@@ -8,7 +8,7 @@ Main Data Logger thread:
     with a timeout of 10s
     Currently only runs a ticker thread and acquisition 19/6/2018
 """
-import randomNum
+import dataGetFunc
 from ticker_example import ticker
 import threading
 import acquisitionSystem as acqSys
@@ -17,7 +17,10 @@ import pre_processor as prePro
 #%% start of main code
 
 #### Inputs
-samplingFunctions = [randomNum.randomNum, randomNum.randomNum] 
+triaxil_accel = dataGetFunc.AccelPiSense
+samplingFunctions = [dataGetFunc.AccelPiSense.x_accel_take, 
+                     dataGetFunc.AccelPiSense.y_accel_take,
+                     dataGetFunc.AccelPiSense.z_accel_take] 
 maxCacheSize = 1000.0 
 fs = 100.0; T = 1/fs
 timeOut = 60.0
@@ -30,8 +33,10 @@ def subtract_1(xx):
     yy = xx - 1
     return yy
 
+def do_nothing(xx):
+    return xx
 
-pre_process_func = [[addition_1,addition_1,addition_1],[subtract_1]]
+pre_process_func = [[do_nothing],[do_nothing],[do_nothing]]
 layover_size = 20
 
 #Creates an AcquisitionSystem 
@@ -42,7 +47,7 @@ PrePross = prePro.PreProcessor(pre_process_func, layover_size=layover_size)
 
 #Creates events
 eventGoGetData = threading.Event()
-eventFileReady = threading.Event() #Does not yet do anything
+eventFileReady = threading.Event() 
 event_ticker_timeout = threading.Event()
 
 #Define and start threads

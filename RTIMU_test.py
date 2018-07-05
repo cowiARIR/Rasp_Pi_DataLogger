@@ -12,7 +12,7 @@ timeout = 30
  
 start_time = time.time()
 
-s = RTIMU.Settings("RTIMU")
+s = RTIMU.Settings("RTIMU_settings")
 imu = RTIMU.RTIMU(s)
 print("IMU Name: " + imu.IMUName())
 
@@ -30,7 +30,10 @@ while current_time < timeout:
     if imu.IMURead():
         data = imu.getAccel()
         print(data)
+    else:
+        print('sampling too fast')
     time.sleep(wait_s)
     current_time = time.time() - start_time
 
-print(data)  
+print(data)
+

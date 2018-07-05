@@ -1,3 +1,2 @@
-#ignore all .csv and .ini files
+#ignore all .csv
 *.csv
-*.ini
