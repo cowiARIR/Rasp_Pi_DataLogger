@@ -8,19 +8,19 @@ Main Data Logger thread:
     with a timeout of 10s
     Currently only runs a ticker thread and acquisition 19/6/2018
 """
-import dataGetFunc
+import DataGetFunc as dataGetFunc
 from ticker_example import ticker
 import threading
-import acquisitionSystem as acqSys
+import AcquisitionSystem as acqSys
 import pre_processor as prePro
 
 #%% start of main code
 
 #### Inputs
-triaxil_accel = dataGetFunc.AccelPiSense
-samplingFunctions = [dataGetFunc.AccelPiSense.x_accel_take, 
-                     dataGetFunc.AccelPiSense.y_accel_take,
-                     dataGetFunc.AccelPiSense.z_accel_take] 
+triaxil_accel = dataGetFunc.AccelPiSense()
+samplingFunctions = [triaxil_accel.x_accel_take, 
+                     triaxil_accel.y_accel_take,
+                     triaxil_accel.z_accel_take] 
 maxCacheSize = 1000.0 
 fs = 100.0; T = 1/fs
 timeOut = 60.0
