@@ -13,17 +13,28 @@ from ticker_example import ticker
 import threading
 import AcquisitionSystem as acqSys
 import pre_processor as prePro
+import RTIMU
 
 #%% start of main code
 
 #### Inputs
-triaxil_accel = dataGetFunc.AccelPiSense()
-samplingFunctions = [triaxil_accel.x_accel_take, 
-                     triaxil_accel.y_accel_take,
-                     triaxil_accel.z_accel_take] 
+s = RTIMU.Settings('RTIMU_settings')
+imu = RTIMU.RTIMU(s) 
+print("IMU Name: " + imu.IMUName()) 
+
+if (not imu.IMUInit()): 
+    print("IMU Init Failed!!!!")
+else: 
+    print("IMU Init Succeeded");
+
+reader = dataGetFunc.AccelReader(imu)
+    
+samplingFunctions = [lambda :reader.x_accel_take(fetch_new_data = True), 
+                     lambda :reader.y_accel_take(),
+                     lambda :reader.z_accel_take()] 
 maxCacheSize = 1000.0 
-fs = 100.0; T = 1/fs
-timeOut = 60.0
+fs = 24; T = 1/fs
+timeOut = 10.0
 
 def addition_1(xx):
     yy = xx + 1
